@@ -1,24 +1,56 @@
-#not_finished
 def solution(args):
-    clone_l = args
-    order_l = []
-    n_ord = []
-    new_l = []
-#     print(clone_l)
-    for i in range(len(args)-1):
-        if args[i] + 1 == clone_l[i + 1]:
-            order_l.append(args[i])
-            if len(order_l) >= 3:
-            order_l.append(args[-1])        
-            new_l.append(order_l)
-        elif len(new_l) > 0 and order_l[-1] == clone_l[i - 1]:
-            order_l.append(args[i])
-            if len(order_l) >= 3:
-                new_l.append(order_l)
-                order_l = []
+    sec_ml = []
+    first_ml = []
+    fin_l = []
+    fin_2l = []
+    result = []
+    long_l = list(range(args[0], args[-1] + 1))
+    # create first modified list.
+    for i in range(len(long_l)):
+        if long_l[i] == args[i]:  # if the elements are equal.
+            first_ml.append(args[i])  # add element to first modified list.
         else:
-            n_ord.append(args[i]) 
-            new_l.append(n_ord)
-            n_ord = []
+            args.insert(i, ' ')  # if the elements are not equal add new empty element.
+            first_ml.append(args[i])  # anyway we have to add element to first modified list.
+    first_ml.append(' ')  # add empty element in the end of first modified list as key.
+    # create second modified list from the first. Which consist empty lists and target lists.
+    for el_1 in first_ml:
+        if el_1 != ' ':
+            sec_ml.append(el_1)
+        else:
+            fin_l.append(sec_ml)
+            sec_ml = []
+    # filtering empty lists from second modified list.
+    while [] in fin_l:
+        fin_l.remove([])
+    # cut redundant data and create new traget lists. 
+    for el in fin_l:
+        if len(el) > 2:
+            fin_2l.append([el[0], el[-1]])
+        else:
+            fin_2l.extend(el)
+    # last steps in formatting
+    for el in fin_2l:
+        if isinstance(el, list):
+            result.append('-'.join(str(x) for x in el))
+        else:
+            result.append(el)
+    return ','.join(str(x) for x in result)
     
-    return new_l
+    
+    def solution(args):
+    out = []
+    beg = end = args[0]
+    
+    for n in args[1:] + [""]:        
+        if n != end + 1:
+            if end == beg:
+                out.append( str(beg) )
+            elif end == beg + 1:
+                out.extend( [str(beg), str(end)] )
+            else:
+                out.append( str(beg) + "-" + str(end) )
+            beg = n
+        end = n
+    
+    return ",".join(out)
